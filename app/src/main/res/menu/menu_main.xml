@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.dreamfish.restreminders.MainActivity">
+    <item
+        android:id="@+id/app_bar_switch"
+        android:title="Switch"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help" />
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="0"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_quit"
+        android:title="@string/action_quit" />
+</menu>
