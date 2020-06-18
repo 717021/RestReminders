@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_white_bg"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_once"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_once"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_everyday"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_everyday"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_workday"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_workday"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_holiday"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_holiday"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_mon_to_fir"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_mon_to_fir"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_mon_to_sat"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_mon_to_sat"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_sun_to_fir"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_sun_to_fir"
+            app:sRightViewType="checkbox" />
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_sat_to_sun"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_repeat_sat_to_sun"
+            app:sRightViewType="checkbox"/>
+
+        <com.allen.library.SuperTextView
+            android:id="@+id/text_repeat_customize"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:sLeftTextString="@string/text_customize"
+            app:sRightIconHeight="15dp"
+            app:sRightIconRes="@drawable/ic_arrow_right"
+            app:sRightIconShowCircle="false"
+            app:sRightIconWidth="15dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        style="@style/ButtonRound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text_cancel" />
+
+
+</LinearLayout>

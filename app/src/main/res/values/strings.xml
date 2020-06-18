@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RestReminders</string>
-    <string name="app_name_2">休息提醒者</string>
+    <string name="app_name_2">提醒者</string>
     <string name="app_version">版本：1.0</string>
-    <string name="app_description">休息提醒者是一款可以提醒程序员定时休息的软件</string>
+    <string name="app_description">提醒者是一款可以提醒程序员定时休息的软件</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -99,10 +99,88 @@
 
     <string name="status_no_task">没有任务正在执行</string>
 
-    <string name="tab_reset_status">休息与工作</string>
-    <string name="tab_todo">我的计划</string>
-    <string name="tab_note">我的随手记</string>
-    <string name="tab_train_help">锻炼帮助</string>
+    <string name="text_more">更多</string>
+    <string name="text_title">标题</string>
+
+    <string name="text_config_work">工作提醒配置</string>
+    <string name="text_start_work">开始工作</string>
+    <string name="text_continue_work">继续工作</string>
+    <string name="text_pause">暂停</string>
+    <string name="text_worked">已经工作了</string>
+    <string name="text_not_open">未开启</string>
+    <string name="text_woring">工作中</string>
+    <string name="text_resting">休息中</string>
+    <string name="text_add">添加</string>
+    <string name="text_goto_settings_edit_more">转到设置编辑更多</string>
+    <string name="text_add_custom_condition">添加自定义条件</string>
+    <string name="text_set_custom_condition">设置自定义条件</string>
+    <string name="text_is_enabled">是否启用</string>
+    <string name="text_sure_quit">您确认要退出吗？退出后将不能为您进行提醒了</string>
+    <string name="text_settings">设置</string>
+    <string name="text_worktime">工作时间段</string>
+    <string name="text_edit_worktime">编辑工作时间段</string>
+    <string name="text_work_config">工作参数配置</string>
+    <string name="text_zerotime">00:00</string>
+    <string name="text_work_once_hours">单次工作时长</string>
+    <string name="text_rest_once_time">单次休息时长</string>
+    <string name="text_work_urgency">工作紧急程度</string>
+    <string name="text_start_time">开始时间</string>
+    <string name="text_end_time">结束时间</string>
+    <string name="text_minute">分钟</string>
+    <string name="text_select_work_urgency">选择工作紧急程度</string>
+    <string name="text_max_time">最长时间</string>
+    <string name="text_min_time">最短时间</string>
+    <string name="text_minute_range">%d-%d 分钟</string>
+    <string name="text_must_greater_than_zero">%s 必须大于 0 </string>
+    <string name="text_must_greater_than">%s 必须大于 %s</string>
+    <string name="text_from_to">%s 至 %s</string>
+    <string name="text_must_enter">请输入 %s</string>
+    <string name="text_am">上午</string>
+    <string name="text_pm">下午</string>
+    <string name="text_press_again_to_quit">再按一次返回到桌面</string>
+
+    <string name="text_placeholder">占位符，ABC</string>
+    <string name="text_i_knew">我知道了</string>
+    <string name="text_welecome">欢迎使用提醒者</string>
+
+    <string name="text_ok">确定</string>
+    <string name="text_cancel">取消</string>
+    <string name="text_delete">删除</string>
+    <string name="text_repeat">重复</string>
+    <string name="text_repeat_type">重复类型</string>
+    <string name="text_customize">自定义</string>
+
+    <string name="text_repeat_once">仅一次</string>
+    <string name="text_repeat_today">仅今天</string>
+    <string name="text_repeat_everyday">每天重复</string>
+    <string name="text_repeat_workday">法定工作日</string>
+    <string name="text_repeat_holiday">法定节假日</string>
+    <string name="text_repeat_mon_to_fir">周一至周五</string>
+    <string name="text_repeat_mon_to_sat">周一至周六</string>
+    <string name="text_repeat_sun_to_fir">周日至周五</string>
+    <string name="text_repeat_sat_to_sun">周六至周日</string>
+
+    <string name="text_sat">周六</string>
+    <string name="text_sun">周日</string>
+    <string name="text_mon">周一</string>
+    <string name="text_tue">周二</string>
+    <string name="text_thu">周三</string>
+    <string name="text_wed">周四</string>
+    <string name="text_fir">周五</string>
+
+    <string name="text_add_custom_date">添加自定义日期</string>
+
+    <string name="text_tip">消息提示</string>
+    <string name="text_sure_delete_worktime">确定要删除这个工作时间吗？</string>
+    <string name="text_delete_ask">删除提示</string>
+
+    <string name="tab_reset_status">休息提醒</string>
+    <string name="tab_todo">待办</string>
+    <string name="tab_note">随手记</string>
+    <string name="tab_center">我的</string>
+
+    <!-- actions -->
+
 
     <string name="action_settings">设置</string>
     <string name="action_quit">退出</string>
@@ -110,9 +188,48 @@
     <string name="action_about">关于</string>
     <string name="action_back">返回</string>
 
+
+    <!-- agreement -->
+    <string name="text_agreement_base_welecome">
+        欢迎使用 AutoCalc ！
+        \nAutoCalc 非常重视您的隐私和个人信息保护。
+        \n在您使用 AutoCalc 前，请认真阅读 <a href="https://imyzc.com/t?x=autocalc_argeement">《用户协议》</a> 及 <a href="https://imyzc.com/t?x=privacy_policy">《隐私政策》</a> ，您同意并接受全部条款后方可开始使用“AutoCalc”。
+        \n另外为了更好地使用产品功能，需征求您的允许，获得以下权限：
+    </string>
+    <string name="text_agreement_base"><a href="https://imyzc.com/t?x=autocalc_argeement">《用户协议》</a>\n<a href="https://imyzc.com/t?x=privacy_policy">《隐私政策》</a>
+        \n\n为了更好地使用产品功能，应用还征求您的允许获得以下权限：
+    </string>
+
+    <string name="text_agreement_devinfo">设备信息</string>
+    <string name="text_agreement_devinfo_sub">包括设备ID/屏幕尺寸/操作系统/设备型号/网络连接模式/移动国家代码/屏幕分辨率及系统语言；用于根据不同的设备及系统版本来提供不同的功能和体验，获取产品的使用情况及Bug信息，帮助我们不断改进产品功能和体验。</string>
+
+    <string name="text_agreement_interenet">网络</string>
+    <string name="text_agreement_interenet_sub">
+        包括IP地址；我们需要联网下载计算数据；以及帮助我们统计产品使用情况、反馈产品BUG，帮助我们不断改进产品功能和体验。
+    </string>
+
+    <string name="text_agreement_write_storage">读写存储</string>
+    <string name="text_agreement_write_storage_sub">
+        我们需要临时写入程序数据、程序计算缓存等等。
+    </string>
+
+    <string name="text_agreement_lost">如果您不同意或拒绝授予这些权限，您将无法使用 App 的部分或全部功能。</string>
+    <string name="text_agreement_allow">同意并继续</string>
+    <string name="text_agreement_not_allow">不同意并退出</string>
+
+
+    <!-- titles -->
+
     <string name="title_activity_main">休息提醒者</string>
     <string name="title_activity_settings">设置休息提醒者</string>
     <string name="title_activity_help">帮助文档</string>
+    <string name="title_exception">抱歉！应用发生了异常</string>
+
+
+    <!-- settings -->
+
+    <string name="settings_key_privacy_policy">隐私政策与许可协议</string>
+    <string name="settings_key_use_24_hours_title">使用 24 小时制</string>
 
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -126,6 +243,16 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 
 
 </resources>

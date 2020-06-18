@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_white_bg"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/text_title"
+        style="@style/TextBigTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text_repeat"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/border_top_dash"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="315dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_mon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_mon"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_tue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_tue"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_wed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_wed"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_thu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_thu"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_fir"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_fir"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_sat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_sat"
+                    app:sRightViewType="checkbox" />
+
+                <com.allen.library.SuperTextView
+                    android:id="@+id/text_con_sun"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:sLeftTextString="@string/text_sun"
+                    app:sRightViewType="checkbox" />
+
+                <LinearLayout
+                    android:id="@+id/view_custom_con"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+
+                <com.dreamfish.restreminders.widget.DrawableCenterButton
+                    android:id="@+id/btn_add"
+                    style="@style/ButtonCommonRound"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="15dp"
+                    android:drawableStart="@drawable/ic_add_small"
+                    android:text="@string/text_add_custom_condition"
+                    android:textAlignment="textStart" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/ButtonRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="@string/text_cancel" />
+
+            <Button
+                android:id="@+id/btn_ok"
+                style="@style/ButtonRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                android:text="@string/text_ok" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

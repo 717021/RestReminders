@@ -3,6 +3,14 @@
     <color name="colorPrimary">#1296db</color>
     <color name="colorPrimaryDark">#0E74AA</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorPrimaryLight">#AEC7E0</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="btn_pad_ok_last_bg_n">#ff808080</color>
+    <color name="btn_pad_ok_last_bg_n_border">#ff2ea5e5</color>
+    <color name="btn_pad_ok_last_bg_p">#ff808080</color>
+    <color name="btn_pad_ok_last_bg_p_border">#ff0d87e5</color>
+    <color name="btn_pad_last_s_n">#0a000000</color>
+    <color name="btn_pad_last_s_p">#0f000000</color>
 </resources>

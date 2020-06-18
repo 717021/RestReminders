@@ -1,4 +1,4 @@
-package com.dreamfish.restreminders.pages;
+package com.dreamfish.restreminders.ui.mine;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,15 +10,15 @@ import com.dreamfish.restreminders.R;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class RestStateFragment extends Fragment {
+public class MineFragment extends Fragment {
+
     public static Fragment newInstance(){
-        RestStateFragment fragment = new RestStateFragment();
-        return fragment;
+        return new MineFragment();
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_page_rest_status,null);
+        View view = inflater.inflate(R.layout.layout_page_trains_help,null);
         return view;
     }
 

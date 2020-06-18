@@ -8,52 +8,25 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <LinearLayout
-        android:id="@+id/view_rest_status_area"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="20dp"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tab_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/text_train_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@android:color/white"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/text_train_status_sm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+    </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_rest_status_area"/>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_main"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        style="@style/Widget.Design.TabLayout"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bottom_nav_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tab_main"
-        app:layout_constraintVertical_bias="1.0">
-
-    </androidx.viewpager.widget.ViewPager>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,18 +1,24 @@
 package com.dreamfish.restreminders.utils;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-public class MyFragmentAdapter extends FragmentStatePagerAdapter {
+public class IconAndTextFragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragments ;
     private List<String> mTitles ;
-    public MyFragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
+    private List<Drawable> mIcons ;
+
+    public IconAndTextFragmentAdapter(FragmentManager fm, List<Fragment> fragments,
+                                      List<String> titles, List<Drawable> icons) {
         super(fm);
         mFragments = fragments;
         mTitles = titles;
+        mIcons = icons;
     }
 
     @Override
@@ -28,5 +34,9 @@ public class MyFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitles.get(position);
+    }
+
+    public Drawable getPageIcon(int position) {
+        return mIcons.get(position);
     }
 }

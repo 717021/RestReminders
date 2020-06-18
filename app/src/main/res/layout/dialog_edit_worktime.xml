@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_white_bg"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        style="@style/TextBigTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text_edit_worktime"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:id="@+id/view_work_time_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/border_top_dash"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center|start"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/text_start_time" />
+
+            <com.zyyoona7.picker.OptionsPickerView
+                android:id="@+id/date_picker_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center|start"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/text_end_time" />
+
+            <com.zyyoona7.picker.OptionsPickerView
+                android:id="@+id/date_picker_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center|start"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/text_repeat_type" />
+
+            <Button
+                android:id="@+id/text_repeat_value"
+                style="@style/ButtonCommon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/text_repeat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center|start"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/text_is_enabled" />
+
+            <Switch
+                android:id="@+id/switch_enable"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btn_cancel"
+                style="@style/ButtonRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="@string/text_cancel" />
+
+            <Button
+                android:id="@+id/btn_ok"
+                style="@style/ButtonRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                android:text="@string/text_ok" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

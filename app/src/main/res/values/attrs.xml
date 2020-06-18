@@ -9,4 +9,13 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+
+    <declare-styleable name="MyTitleBar">
+        <attr name="title" format="string"/>
+        <attr name="left_icon" format="color|reference"/>
+        <attr name="right_icon" format="color|reference"/>
+        <attr name="right_text" format="string"/>
+        <attr name="titlebar_type" format="integer"/>
+    </declare-styleable>
+
 </resources>

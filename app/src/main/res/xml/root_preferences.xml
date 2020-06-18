@@ -36,6 +36,11 @@
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat
+            app:key="use_24_hours"
+            app:defaultValue="false"
+            app:title="@string/settings_key_use_24_hours_title" />
+
+        <SwitchPreferenceCompat
             app:key="sync"
             app:title="@string/sync_title" />
 
