@@ -164,7 +164,7 @@ public class EditWorkTimeDialog extends Dialog {
     }
   }
 
-  @OnClick(R.id.btn_cancel)
+  @OnClick(R.id.btn_ok)
   void onOkClicked(View v) {
     if (onEditWorkTimeDialogFinishListener!= null) {
       getSelectedValue();
@@ -172,12 +172,12 @@ public class EditWorkTimeDialog extends Dialog {
       onEditWorkTimeDialogFinishListener.onEdited(startTime.getTime(), endTime.getTime(), repeat, workTimeEnabled);
       dismiss();
 
-    } else dismiss();
+    }
   }
-  @OnClick(R.id.btn_ok)
+  @OnClick(R.id.btn_cancel)
   void onCancelClicked(View v) {
-    if (onEditWorkTimeDialogFinishListener!= null) { onEditWorkTimeDialogFinishListener.onCanceled(); }
-    dismiss();
+    if (onEditWorkTimeDialogFinishListener!= null) { onEditWorkTimeDialogFinishListener.onCanceled(); dismiss(); }
+
   }
   @OnClick(R.id.text_repeat_value)
   void onRepeatClicked(View v) {

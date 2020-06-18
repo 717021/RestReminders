@@ -118,6 +118,11 @@
     <string name="text_sure_quit">您确认要退出吗？退出后将不能为您进行提醒了</string>
     <string name="text_settings">设置</string>
     <string name="text_worktime">工作时间段</string>
+    <string name="text_edit">编辑</string>
+    <string name="text_finish">完成</string>
+    <string name="text_enable">启用</string>
+    <string name="text_disable">禁用</string>
+    <string name="text_work_time_state_changed">已经 %s 工作时间段</string>
     <string name="text_edit_worktime">编辑工作时间段</string>
     <string name="text_work_config">工作参数配置</string>
     <string name="text_zerotime">00:00</string>
@@ -220,8 +225,8 @@
 
     <!-- titles -->
 
-    <string name="title_activity_main">休息提醒者</string>
-    <string name="title_activity_settings">设置休息提醒者</string>
+    <string name="title_activity_main">提醒者</string>
+    <string name="title_activity_settings">设置</string>
     <string name="title_activity_help">帮助文档</string>
     <string name="title_exception">抱歉！应用发生了异常</string>
 

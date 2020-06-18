@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +39,8 @@ import com.dreamfish.restreminders.utils.SettingsUtils;
 import com.dreamfish.restreminders.widget.MainTimerCanvases;
 import com.dreamfish.restreminders.widget.MyTitleBar;
 import com.dreamfish.restreminders.widget.SmallCheckItem;
+import com.dreamfish.restreminders.workers.IWorkerHost;
+import com.dreamfish.restreminders.workers.RestReminderWorker;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,10 +53,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 import static com.dreamfish.restreminders.dialogs.CommonDialogs.RESULT_SETTING_ACTIVITY;
 
@@ -76,13 +84,14 @@ public class RestStateFragment extends Fragment {
         context = getContext();
         handler = new RestStateHandler(this);
         resources = getResources();
+        restReminderWorker = (RestReminderWorker)((IWorkerHost)getActivity().getApplication())
+                .getWorker(RestReminderWorker.NAME);
 
         ButterKnife.bind(this, view);
 
         loadSettings();
         initView(view);
-        loadWorkTimes();
-        applySettings();
+        loadViewData();
     }
 
     @Override
@@ -93,11 +102,22 @@ public class RestStateFragment extends Fragment {
 
     private Context context;
     private Resources resources;
+    private RestReminderWorker restReminderWorker;
 
     private Point screenSize;
 
-    @BindString(R.string.text_from_to)
-    String text_from_to;
+    @BindString(R.string.text_from_to) String text_from_to;
+    @BindString(R.string.text_minute_range) String text_minute_range;
+    @BindString(R.string.text_work_time_state_changed) String text_work_time_state_changed;
+    @BindString(R.string.text_enable) String text_enable;
+    @BindString(R.string.text_disable) String text_disable;
+    @BindDrawable(R.drawable.btn_round) Drawable btn_round;
+
+    @BindColor(R.color.color_status_active) ColorStateList color_status_active;
+    @BindColor(R.color.color_status_not_active) ColorStateList color_status_not_active;
+    @BindColor(R.color.color_status_not_present) ColorStateList color_status_not_present;
+    @BindColor(R.color.color_status_not_enable) ColorStateList color_status_not_enable;
+
     @BindView(R.id.layout_root)
     ViewGroup layout_root;
     @BindView(R.id.layout_top)
@@ -110,9 +130,13 @@ public class RestStateFragment extends Fragment {
     ViewGroup layout_settings;
     @BindView(R.id.main_timer)
     MainTimerCanvases main_timer;
-    @BindView(R.id.view_work_time_set)
-    LinearLayout view_work_time_set;
-
+    @BindView(R.id.view_work_time_items)
+    LinearLayout view_work_time_items;
+    @BindView(R.id.btn_edit_worktimes)
+    Button btn_edit_worktimes;
+    @BindView(R.id.btn_edit_worktimes_finish)
+    Button btn_edit_worktimes_finish;
+    
     @BindView(R.id.btn_pause)
     Button btn_pause;
     @BindView(R.id.btn_start)
@@ -162,7 +186,7 @@ public class RestStateFragment extends Fragment {
         layout_settings.setVisibility(visible ? View.VISIBLE : View.GONE);
         layout_control.setVisibility(!visible ? View.VISIBLE : View.GONE);
         if(!visible) {
-            setWorkTimeItemDelMode(false);
+            setWorkTimeItemEditMode(false);
         }
     }
 
@@ -238,8 +262,8 @@ public class RestStateFragment extends Fragment {
         new EditIntRangeDialog(context)
                 .setTextStart(resources.getString(R.string.text_min_time))
                 .setTextEnd(resources.getString(R.string.text_max_time))
-                .setStartVal(workOnceTimeMin)
-                .setEndVal(workOnceTimeMax)
+                .setStartVal(restReminderWorker.getWorkOnceTimeMin())
+                .setEndVal(restReminderWorker.getWorkOnceTimeMax())
                 .setTitle(text_workhours_set.getLeftString())
                 .setOnEditIntRangeDialogFinishListener(new EditIntRangeDialog.OnEditIntRangeDialogFinishListener() {
                     @Override
@@ -254,8 +278,8 @@ public class RestStateFragment extends Fragment {
         new EditIntRangeDialog(context)
                 .setTextStart(resources.getString(R.string.text_min_time))
                 .setTextEnd(resources.getString(R.string.text_max_time))
-                .setStartVal(restOnceTimeMin)
-                .setEndVal(restOnceTimeMax)
+                .setStartVal(restReminderWorker.getRestOnceTimeMin())
+                .setEndVal(restReminderWorker.getRestOnceTimeMax())
                 .setTitle(text_reset_time_set.getLeftString())
                 .setOnEditIntRangeDialogFinishListener(new EditIntRangeDialog.OnEditIntRangeDialogFinishListener() {
                     @Override
@@ -264,25 +288,33 @@ public class RestStateFragment extends Fragment {
                     public void onCanceled() {}
                 }).show();
     }
+    @OnClick(R.id.btn_edit_worktimes)
+    void onEditTimesClicked(View v)  {
+        setWorkTimeItemEditMode(true);
+    }
+    @OnClick(R.id.btn_edit_worktimes_finish)
+    void onEditTimesFinishClicked(View v) {
+        setWorkTimeItemEditMode(false);
+    }
 
     // ============================
     // 时钟设置控制
     // ============================
 
-    private List<WorkTime> workTimes = new ArrayList<>();
-    private boolean workTimeItemDelMode = false;
+    private boolean workTimeItemEditMode = false;
 
     private void addWorkTimeSetItem(Date timeStart, Date timeEnd, DayRepeatType repeatType, boolean enable) {
-        addWorkTimeSetItem(new WorkTime(timeStart, timeEnd, enable, repeatType));
+        addWorkTimeSetItem(new WorkTime(timeStart, timeEnd, enable, repeatType), true);
     }
-    private void addWorkTimeSetItem(WorkTime workTime) {
-        workTimes.add(workTime);
+    private void addWorkTimeSetItem(WorkTime workTime, boolean byUser) {
+        if(byUser) restReminderWorker.addWorkTime(workTime);
 
         //View
         SmallCheckItem newItem = new SmallCheckItem(context);
         newItem.setData(workTime);
         newItem.setText(String.format(text_from_to, DateUtils.formatTimeMinuteAuto(workTime.getStartTime()),
                 DateUtils.formatTimeMinuteAuto(workTime.getEndTime())));
+        newItem.setBackground(btn_round.getConstantState().newDrawable());
         newItem.setChecked(workTime.isEnabled());
 
         newItem.getDeleteButton().setOnClickListener((v) -> {
@@ -297,72 +329,94 @@ public class RestStateFragment extends Fragment {
                         public void onPositiveClick(Dialog dialog) { dialog.dismiss(); }
                         @Override
                         public void onNegtiveClick(Dialog dialog) {
-                            workTimes.remove(workTime);
-                            view_work_time_set.removeView(newItem);
+                            restReminderWorker.removeWorkTime(workTime);
+                            view_work_time_items.removeView(newItem);
                             dialog.dismiss();
                         }
                     })
                     .show();
         });
-        newItem.getCheckBox().setOnCheckedChangeListener((buttonView, isChecked) -> workTime.setEnabled(isChecked) );
+        newItem.getCheckBox().setOnCheckedChangeListener((buttonView, isChecked) -> {
+            workTime.setEnabled(isChecked);
+            Toasty.normal(context,
+                    String.format(text_work_time_state_changed, (isChecked ? text_enable : text_disable))
+            ).show();
+            flushWorkTimeItemStatus(workTime, newItem);
+        } );
 
         newItem.setOnClickListener((v) -> {
-            //编辑工作时间
-           new EditWorkTimeDialog(context)
-                .setUse24Hours(use24Hours)
-                .setStartTime(workTime.getStartTime())
-                .setEndTime(workTime.getEndTime())
-                .setRepeat(workTime.getRepeat())
-                .setWorkTimeEnabled(workTime.isEnabled())
-                .setOnEditWorkTimeDialogFinishListener(new EditWorkTimeDialog.OnEditWorkTimeDialogFinishListener() {
-                    @Override
-                    public void onEdited(Date start, Date end, DayRepeatType repeatType, boolean enabled) {
-                        workTime.setStartTime(start);
-                        workTime.setEndTime(end);
-                        workTime.setEnabled(enabled);
-                        newItem.setText(String.format(text_from_to, DateUtils.formatTimeMinuteAuto(start),
-                                DateUtils.formatTimeMinuteAuto(end)));
-                    }
-                    @Override
-                    public void onCanceled() {}
-                })
-                .show();
+            if(workTimeItemEditMode) {
+                //编辑工作时间
+                new EditWorkTimeDialog(context)
+                        .setUse24Hours(use24Hours)
+                        .setStartTime(workTime.getStartTime())
+                        .setEndTime(workTime.getEndTime())
+                        .setRepeat(workTime.getRepeat())
+                        .setWorkTimeEnabled(workTime.isEnabled())
+                        .setOnEditWorkTimeDialogFinishListener(new EditWorkTimeDialog.OnEditWorkTimeDialogFinishListener() {
+                            @Override
+                            public void onEdited(Date start, Date end, DayRepeatType repeatType, boolean enabled) {
+                                workTime.setStartTime(start);
+                                workTime.setEndTime(end);
+                                workTime.setEnabled(enabled);
+                                workTime.setLastEditDay(new Date());
+                                newItem.setText(String.format(text_from_to, DateUtils.formatTimeMinuteAuto(start),
+                                        DateUtils.formatTimeMinuteAuto(end)));
+                                flushWorkTimeItemStatus(workTime, newItem);
+                            }
+
+                            @Override
+                            public void onCanceled() {
+                            }
+                        })
+                        .show();
+            }
         });
         newItem.setOnLongClickListener(v -> {
-            setWorkTimeItemDelMode(!workTimeItemDelMode);
+            setWorkTimeItemEditMode(!workTimeItemEditMode);
             return true;
         });
-        view_work_time_set.addView(newItem, 1);
-
+        view_work_time_items.addView(newItem);
     }
-    private void setWorkTimeItemDelMode(boolean isDelMode) {
-        if(workTimeItemDelMode != isDelMode) {
-            workTimeItemDelMode = isDelMode;
+    private void setWorkTimeItemEditMode(boolean isEditMode) {
+        if(workTimeItemEditMode != isEditMode) {
+            workTimeItemEditMode = isEditMode;
+            if(workTimeItemEditMode) {
+                btn_edit_worktimes.setVisibility(View.GONE);
+                btn_edit_worktimes_finish.setVisibility(View.VISIBLE);
+            }else {
+                btn_edit_worktimes.setVisibility(View.VISIBLE);
+                btn_edit_worktimes_finish.setVisibility(View.GONE);
+            }
             SmallCheckItem item = null;
-            for (int i = 1, c = view_work_time_set.getChildCount() - 1; i < c; i++) {
-                item = (SmallCheckItem) view_work_time_set.getChildAt(i);
-                item.setDeleteMode(workTimeItemDelMode);
+            for (int i = 0, c = view_work_time_items.getChildCount(); i < c; i++) {
+                item = (SmallCheckItem) view_work_time_items.getChildAt(i);
+                item.setDeleteMode(workTimeItemEditMode);
             }
         }
+        flushWorkTimeListStatus();
     }
-
-    //加载保存工作时间段
-    private void loadWorkTimes() {
-        Log.d(TAG, "workTimes : " + settingsUtils.readSettings("workTimes", "[]"));
-        JSONArray jsonArray = JSON.parseArray(settingsUtils.readSettings("workTimes", "[]"));
-        for(int i = 0, c = jsonArray.size(); i < c; i++) {
-            WorkTime workTime = new WorkTime(jsonArray.getJSONObject(i));
-            addWorkTimeSetItem(workTime);
+    private void flushWorkTimeListStatus() {
+        SmallCheckItem item = null;
+        WorkTime workTime = null;
+        for (int i = 0, c = view_work_time_items.getChildCount(); i < c; i++) {
+            item = (SmallCheckItem) view_work_time_items.getChildAt(i);
+            workTime = (WorkTime)item.getData();
+            flushWorkTimeItemStatus(workTime, item);
         }
     }
-    private void saveWorkTimes() {
-        JSONArray jsonArray = new JSONArray();
-        for(int i = 0, c = workTimes.size(); i < c; i++)
-            jsonArray.add(workTimes.get(i).saveToJson());
-        settingsUtils.writeSettings("workTimes", jsonArray.toJSONString());
+    private void flushWorkTimeItemStatus(WorkTime workTime, SmallCheckItem smallCheckItem) {
+        if(workTime.checkMet(false, false)) {
+            if(workTime.isEnabled())
+                smallCheckItem.setBackgroundTintList(workTime.checkMet(true, true) ?
+                    color_status_active : color_status_not_present);
+            else smallCheckItem.setBackgroundTintList(color_status_not_enable);
+            smallCheckItem.setVisibility(View.VISIBLE);
+        } else {
+            smallCheckItem.setBackgroundTintList(color_status_not_active);
+            smallCheckItem.setVisibility(workTimeItemEditMode ? View.VISIBLE : View.GONE);
+        }
     }
-
-
 
     // ============================
     // 设置加载与保存
@@ -373,29 +427,23 @@ public class RestStateFragment extends Fragment {
     };
 
     private void setWorkUrgency(int level) {
-        workUrgency = level;
+        restReminderWorker.setWorkUrgency(level);
         text_work_urgency.setRightString(text_work_urgency_choose[level]);
     }
     private void setWorkOnceTime(int min, int max) {
-        workOnceTimeMin = min;
-        workOnceTimeMax = max;
-        text_workhours_set.setRightString(String.format(resources.getString(R.string.text_minute_range), min, max));
+        restReminderWorker.setWorkOnceTimeMax(max);
+        restReminderWorker.setWorkOnceTimeMin(min);
+        text_workhours_set.setRightString(String.format(text_minute_range, min, max));
     }
     private void setRestOnceTime(int min, int max) {
-        restOnceTimeMin = min;
-        restOnceTimeMax = max;
-        text_reset_time_set.setRightString(String.format(resources.getString(R.string.text_minute_range), min, max));
+        restReminderWorker.setRestOnceTimeMax(max);
+        restReminderWorker.setRestOnceTimeMin(min);
+        text_reset_time_set.setRightString(String.format(text_minute_range, min, max));
     }
 
     //设置条目
 
     private boolean use24Hours = false;
-    private int workUrgency = 3;
-    private int workOnceTimeMax = 110;
-    private int workOnceTimeMin = 45;
-    private int restOnceTimeMax = 25;
-    private int restOnceTimeMin = 15;
-
     private SettingsUtils settingsUtils = null;
 
     private void loadSettings() {
@@ -404,33 +452,43 @@ public class RestStateFragment extends Fragment {
 
         //加载通用设置
         use24Hours = prefs.getBoolean("use24Hours", false);
-        workUrgency = prefs.getInt("workUrgency", 3);
-        workOnceTimeMax = prefs.getInt("workOnceTimeMax", 110);
-        workOnceTimeMin = prefs.getInt("workOnceTimeMin", 45);
-        restOnceTimeMax = prefs.getInt("restOnceTimeMax", 25);
-        restOnceTimeMin = prefs.getInt("restOnceTimeMin", 15);
+        restReminderWorker.setWorkUrgency(prefs.getInt("workUrgency", 3));
+        restReminderWorker.setWorkOnceTimeMax(prefs.getInt("workOnceTimeMax", 110));
+        restReminderWorker.setWorkOnceTimeMin(prefs.getInt("workOnceTimeMin", 45));
+        restReminderWorker.setRestOnceTimeMax(prefs.getInt("restOnceTimeMax", 25));
+        restReminderWorker.setRestOnceTimeMin(prefs.getInt("restOnceTimeMin", 15));
+
+        //读取数据
+        if(restReminderWorker.getWorkTimesCount() == 0) {
+            restReminderWorker.loadWorkTimes(settingsUtils.readSettings("workTimes", "[]"));
+        }
     }
-    private void applySettings() {
+    private void loadViewData() {
+        for(int i = 0, c = restReminderWorker.getWorkTimesCount(); i < c; i++) {
+            addWorkTimeSetItem(restReminderWorker.getWorkTimeAt(i), false);
+        }
+        flushWorkTimeListStatus();
         DateUtils.setsIs24Hour(use24Hours);
-        setWorkUrgency(workUrgency);
-        setWorkOnceTime(workOnceTimeMin, workOnceTimeMax);
-        setRestOnceTime(restOnceTimeMin, restOnceTimeMax);
+        setWorkUrgency(restReminderWorker.getWorkUrgency());
+        setWorkOnceTime(restReminderWorker.getWorkOnceTimeMin(), restReminderWorker.getWorkOnceTimeMax());
+        setRestOnceTime(restReminderWorker.getRestOnceTimeMin(), restReminderWorker.getRestOnceTimeMax());
     }
     private void saveSettings() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
         //保存通用设置
-        editor.putInt("workUrgency", workUrgency);
-        editor.putInt("workOnceTimeMax", workOnceTimeMax);
-        editor.putInt("workOnceTimeMin", workOnceTimeMin);
-        editor.putInt("restOnceTimeMax", restOnceTimeMax);
-        editor.putInt("restOnceTimeMin", restOnceTimeMin);
+        editor.putInt("workUrgency", restReminderWorker.getWorkUrgency());
+        editor.putInt("workOnceTimeMax", restReminderWorker.getWorkOnceTimeMax());
+        editor.putInt("workOnceTimeMin", restReminderWorker.getWorkOnceTimeMin());
+        editor.putInt("restOnceTimeMax", restReminderWorker.getRestOnceTimeMax());
+        editor.putInt("restOnceTimeMin", restReminderWorker.getRestOnceTimeMin());
 
         editor.apply();
 
         //保存其他设置
-        saveWorkTimes();
+        //保存 workTimes
+        settingsUtils.writeSettings("workTimes", restReminderWorker.saveWorkTimes());
     }
 
     // ============================

@@ -6,6 +6,16 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorPrimaryLight">#AEC7E0</color>
 
+
+    <color name="color_active_n">#13AF1A</color>
+    <color name="color_active_p">#0F8514</color>
+    <color name="color_deactive_n">#0a000000</color>
+    <color name="color_deactive_p">#0f000000</color>
+    <color name="color_not_present_n">#B1CC16</color>
+    <color name="color_not_present_p">#D1F119</color>
+    <color name="color_not_enable_n">#DF3A12</color>
+    <color name="color_not_enable_p">#AE2E0E</color>
+
     <color name="black_overlay">#66000000</color>
     <color name="btn_pad_ok_last_bg_n">#ff808080</color>
     <color name="btn_pad_ok_last_bg_n_border">#ff2ea5e5</color>

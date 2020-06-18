@@ -7,8 +7,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dreamfish.restreminders.R;
 import com.dreamfish.restreminders.model.ISaveableJsonObject;
+import com.dreamfish.restreminders.workers.DayInfoProviderWorker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +55,12 @@ public class DayRepeatType implements ISaveableJsonObject, IDayConditionGroup {
    * 不重复
    */
   public final static int REPEAT_ONCE = 8;
+
+  private DayInfoProviderWorker dayInfoProviderWorker;
+
+  private void getDayInfoProvider() {
+    dayInfoProviderWorker = DayInfoProviderWorker.getInstance();
+  }
 
   //数据
   //======================
@@ -97,15 +106,46 @@ public class DayRepeatType implements ISaveableJsonObject, IDayConditionGroup {
   public DayRepeatType(int repeatType) {
     this.repeatType = repeatType;
     this.repeatConditions = new ArrayList<>();
+    getDayInfoProvider();
   }
   public DayRepeatType(String jsonString) {
-    loadFromoJson(jsonString);
+    loadFromJson(jsonString);
+    getDayInfoProvider();
   }
 
   /**
    * 检查今天是否条件符合
    */
-  public boolean checkTodayShouldRepeat() {
+  public boolean checkTodayShouldRepeat(Date lastEditDay) {
+    Calendar cal = Calendar.getInstance();
+    int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+    switch (repeatType) {
+      case REPEAT_EVERY_DAY: return true;
+      case REPEAT_WORKDAY: return dayInfoProviderWorker.getTodayWorkday();
+      case REPEAT_HOLIDAY: return dayInfoProviderWorker.getTodayHoliday();
+      case REPEAT_MONDAY_TO_FRIDAY:
+        return dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.FRIDAY;
+      case REPEAT_MONDAY_TO_SATURDAY:
+        return dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.SATURDAY;
+      case REPEAT_SUNDAY_TO_FRIDAY:
+        return dayOfWeek >= Calendar.SUNDAY && dayOfWeek <= Calendar.FRIDAY;
+      case REPEAT_SATURDAY_TO_SUNDAY:
+        return dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
+      case REPEAT_CUSTOM:
+        for(DayCondition dayCondition : repeatConditions)
+          if(dayCondition.checkMet())
+            return true;
+        break;
+      case REPEAT_ONCE:
+        Calendar lastEditDayCal = Calendar.getInstance();
+        lastEditDayCal.setTime(lastEditDay);
+        if(lastEditDayCal.get(Calendar.YEAR) == cal.get(Calendar.YEAR)
+                && lastEditDayCal.get(Calendar.MONTH) == cal.get(Calendar.MONTH)
+                && lastEditDayCal.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR))
+          return true;
+        break;
+    }
+
     return false;
   }
 
@@ -113,11 +153,11 @@ public class DayRepeatType implements ISaveableJsonObject, IDayConditionGroup {
   //======================
 
   @Override
-  public void loadFromoJson(String jsonString) {
-    loadFromoJson(JSON.parseObject(jsonString));
+  public void loadFromJson(String jsonString) {
+    loadFromJson(JSON.parseObject(jsonString));
   }
   @Override
-  public void loadFromoJson(JSONObject jsonObject) {
+  public void loadFromJson(JSONObject jsonObject) {
     this.repeatConditions = new ArrayList<>();
     this.repeatType = jsonObject.getInteger("repeatType");
     JSONArray jsonArray = jsonObject.getJSONArray("repeatConditions");

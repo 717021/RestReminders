@@ -39,11 +39,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
-import io.palaima.debugdrawer.DebugDrawer;
-import io.palaima.debugdrawer.commons.BuildModule;
-import io.palaima.debugdrawer.commons.DeviceModule;
-import io.palaima.debugdrawer.commons.NetworkModule;
-import io.palaima.debugdrawer.commons.SettingsModule;
 
 import static com.dreamfish.restreminders.dialogs.CommonDialogs.RESULT_SETTING_ACTIVITY;
 
@@ -141,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements IDrawerOwner {
     @BindView(R.id.nav)
     NavigationView nav;
 
+    private boolean isScrolled = false;
+
     private void initView() {
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -170,16 +167,31 @@ public class MainActivity extends AppCompatActivity implements IDrawerOwner {
 
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            @Override
-            public void onPageSelected(int position) {
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+           @Override
+           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+           }
+
+           @Override
+           public void onPageSelected(int position) {
+           }
+
+           @Override
+           public void onPageScrollStateChanged(int state) {
+               switch (state) {
+                   case ViewPager.SCROLL_STATE_DRAGGING:
+                       isScrolled = false;
+                       break;
+                   case ViewPager.SCROLL_STATE_SETTLING:
+                       isScrolled = true;
+                       break;
+                   case ViewPager.SCROLL_STATE_IDLE:
+                       if (mViewPager.getCurrentItem() == 0 && !isScrolled)
+                           openDrawer();
+                       isScrolled = true;
+                       break;
+               }
+           }
+       });
 
         //tab设置图标和字体
         for (int i = 0; i < mTabLayout.getTabCount(); i++){
@@ -290,7 +302,5 @@ public class MainActivity extends AppCompatActivity implements IDrawerOwner {
     }
 
     @Override
-    public void openDrawer() {
-        drawerLayout.openDrawer(Gravity.LEFT);
-    }
+    public void openDrawer() { drawerLayout.openDrawer(Gravity.LEFT); }
 }

@@ -49,21 +49,21 @@ public class DayCondition implements ISaveableJsonObject {
     this.dayOfWeek = dayOfWeek;
   }
   public DayCondition(String jsonString) {
-    loadFromoJson(jsonString);
+    loadFromJson(jsonString);
   }
   public DayCondition(JSONObject jsonObject) {
-    loadFromoJson(jsonObject);
+    loadFromJson(jsonObject);
   }
 
   //加载与保存
   //======================
 
   @Override
-  public void loadFromoJson(String jsonString) {
-    loadFromoJson(JSON.parseObject(jsonString));
+  public void loadFromJson(String jsonString) {
+    loadFromJson(JSON.parseObject(jsonString));
   }
   @Override
-  public void loadFromoJson(JSONObject jsonObject) {
+  public void loadFromJson(JSONObject jsonObject) {
     type = jsonObject.getInteger("type");
     date = jsonObject.getDate("date");
     dayOfWeek = jsonObject.getInteger("dayOfWeek");
